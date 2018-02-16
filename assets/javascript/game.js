@@ -6,12 +6,9 @@ var wordChoices = ["beagle", "poodle", "dachshund", "corgi"];
 var currentWord = "";
 //Selects a random word from wordChoices array, shows a _ for every character in that word in the <div id="wordChoices"> element in the HTML
 
-function pickRandomWork() {
+function pickRandomWord() {
     currentWord = wordChoices[Math.floor(Math.random() * wordChoices.length)];
 }
-
-
-
 
 function showCurrentWord() { 
     var wordChoiceDiv = document.getElementById("wordChoices"); 
@@ -27,7 +24,7 @@ function showCurrentWord() {
 var guessLeft = 12;
 
 //document.onload = pickRandomWord();
-document.onload = pickRandomWork();
+document.onload = pickRandomWord();
 document.onload = showCurrentWord();
 document.onload = setGuesses ();
 
@@ -46,9 +43,34 @@ document.onload = setGuesses ();
 var userGuess = []; 
 var foundLetter = 0;
 
+
 document.onkeyup = function(event) {
     if (guessLeft !== 0) { //if User Guesses is not 0
-         userGuess.push(event.key); // add key pushed to userGuess Array
+        var currentLetter = event.key;
+        if (event.keyCode >= 65 && event.keyCode <= 90) { //if key pushed is a letter
+        if (userGuess.length === 0) {
+          userGuess.push(currentLetter);
+          substract1();
+        }
+       else { 
+          var count = 0;
+        for (var n = 0; n < userGuess.length; n++) {
+             if (currentLetter !== userGuess[n]){
+              count++;
+                if (count === userGuess.length) {
+                    userGuess.push(currentLetter);
+                    substract1();
+            }
+           }
+       }
+        }
+       
+       // userGuess.push(event.key); // add key pushed to userGuess Array
+
+             
+        
+    
+            
     
     //if (event.key !== userGuess[0]) { //need to make this a loop or do a bunch of ors ||
       //  userGuess.push(event.key); //if the key pushed, does not equal an item in the current array, add it to the array
@@ -74,11 +96,11 @@ document.onkeyup = function(event) {
         
         } 
         showGuesses();
-        substract1();
         checkForWin ();
         checkForLoss ();   
         
     }       
+}
 }
 
 
@@ -88,7 +110,9 @@ function showGuesses() { //only show guesses if does not match?
     for (var l = 0; l < userGuess.length; l++) {
         var Guess = document.getElementById("Guess-" + l);
         Guess.innerHTML = (userGuess[l] + ", ");
+        
     }
+
 }
 
 
@@ -169,7 +193,7 @@ function checkForWin (){
         Guess.innerHTML = (""); 
     }
     userGuess = [];
-    pickRandomWork();
+    pickRandomWord();
     showCurrentWord();
     // pickRandomWord (); need to reset current word, make an independent function that I can call
   }
